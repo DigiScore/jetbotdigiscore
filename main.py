@@ -1,5 +1,6 @@
 """Taken from https://github.com/NVIDIA-AI-IOT/jetbot/blob/master/notebooks/collision_avoidance/live_demo.ipynb"""
 
+# Import libraries
 import torch
 import torchvision
 import cv2
@@ -10,6 +11,8 @@ import ipywidgets.widgets as widgets
 from jetbot import Camera, bgr8_to_jpeg
 import torch.nn.functional as F
 import time
+from jetbot import Robot
+from audio import Listener
 
 
 model = torchvision.models.alexnet(pretrained=False)
@@ -48,11 +51,10 @@ camera_link = traitlets.dlink((camera, 'value'), (image, 'value'), transform=bgr
 
 display(widgets.VBox([widgets.HBox([image, blocked_slider]), speed_slider]))
 
-from jetbot import Robot
 
 robot = Robot()
 
-
+listener = Listener()
 
 def update(change):
     global blocked_slider, robot
@@ -67,6 +69,9 @@ def update(change):
 
     blocked_slider.value = prob_blocked
 
+    if listener.mic_in > 0.64:
+        robot.right(speed_slider.value)
+
     if prob_blocked < 0.5:
         robot.forward(speed_slider.value)
     else:
@@ -78,8 +83,6 @@ def update(change):
 update({'new': camera.value})  # we call the function once to initialize
 
 camera.observe(update, names='value')  # this attaches the 'update' function to the 'value' traitlet of our camera
-
-import time
 
 camera.unobserve(update, names='value')
 
