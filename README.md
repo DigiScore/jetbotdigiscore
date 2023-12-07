@@ -1,28 +1,30 @@
-# JetBot
+# Collision Avoidance
 
-<!--[<img src="https://img.shields.io/discord/553852754058280961.svg">](https://discord.gg/Ady6NtF) -->
+There are 2 scripts required here to work with the DigiScore Jetbot ensemble:
+    | audio.py
+    | CA_Digiscore.ipynb
 
-> Looking for a quick way to get started with JetBot?  Many third party kits are [now available](https://jetbot.org/master/third_party_kits.html)!
+Place these together into the 'notebooks' folder of the 'jetbot'. They have been designed to run through JupyterLab interface
+so the proprietary Jetbot disk image can be used. Follow instructions here https://jetbot.org/master/software_setup/sd_card.html
 
-<img src="../..//wiki/images/jetson-jetbot-illustration_1600x1260.png" height="256">
+The following libraries need to be added at root level after the SD Card image has been installed AND the setup instructions have
+ been completed.
 
-JetBot is an open-source robot based on NVIDIA Jetson Nano that is
+1. Plug a screen into the Nano. 
+Notice the Ubuntu UI has been disabled, so you should get a terminal window.
 
-* **Affordable** - Less than $150 add-on to Jetson Nano
-* **Educational** - Tutorials from basic motion to AI based collision avoidance
-* **Fun!** - Interactively programmed from your web browser
+2. login id: jetbot
+3. password: jetbot
 
-Building and using JetBot gives the hands on experience needed to create entirely new AI projects.
+4. check video camera is connected
+ls -l /dev/video0
 
-To get started, read the [JetBot documentation](https://jetbot.org).
+5. sudo apt-get update
+password~: jetbot
 
-## Get involved
+6. get portaudio libraries
+sudo apt-get install portaudio19-dev python-all-dev python3-all-dev
 
-We really appreciate any feedback related to JetBot, and also just enjoy seeing what you're working on!  There is a growing community of Jetson Nano and JetBot users.  It's easy to get involved involved...
-
-<!--* Join the [chat server](https://discord.gg/Ady6NtF)-->
-* Ask a question and discuss JetBot related topics on the [JetBot GitHub Discussions](https://github.com/NVIDIA-AI-IOT/jetbot/discussions)
-* Report a bug by [creating an issue](https://github.com/NVIDIA-AI-IOT/jetbot/issues)
-* Share your project or ask a question on the [Jetson Developer Forums](https://devtalk.nvidia.com/default/board/139/jetson-embedded-systems/)
-
+7. install pyaudio
+python3 pip install pyaudio
 

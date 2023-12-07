@@ -1,6 +1,6 @@
 import numpy as np
 import pyaudio
-import logging
+from threading import Thread
 
 
 class Listener:
@@ -13,19 +13,29 @@ class Listener:
         self.running = True
         self.connected = False
         self.logging = False
+        self.mic_in = 0
 
         # set up mic listening func
-        self.CHUNK = 2**11
+        self.CHUNK = 2 ** 11
         self.RATE = 44100
         self.p = pyaudio.PyAudio()
+
+        # get USB mic as source
+        info = self.p.get_host_api_info_by_index(0)
+        numdevices = info.get('deviceCount')
+
         self.stream = self.p.open(
             format=pyaudio.paInt16,
             channels=1,
             rate=self.RATE,
             input=True,
             frames_per_buffer=self.CHUNK,
+            input_device_index=numdevices - 1
         )
 
+    def mainloop(self):
+        loop = Thread(target=self.snd_listen)
+        loop.start()
 
     def snd_listen(self):
         """
@@ -34,7 +44,7 @@ class Listener:
         A secondary function it analyses the input sound for a fundamental freq.
         This is currently a redundant function.
         """
-        logging.info("mic listener: started!")
+        # logging.info("mic listener: started!")
         while self.running:
             data = np.frombuffer(
                 self.stream.read(self.CHUNK, exception_on_overflow=False),
@@ -42,8 +52,8 @@ class Listener:
             )
             peak = np.average(np.abs(data)) * 2
             if peak > 1000:
-                bars = "#" * int(50 * peak / 2**16)
-                logging.debug("MIC LISTENER: %05d %s" % (peak, bars))
+                bars = "#" * int(50 * peak / 2 ** 16)
+                # print("MIC LISTENER: %05d %s" % (peak, bars))
 
                 self.mic_in = peak  # / 30000
 
@@ -54,6 +64,8 @@ class Listener:
 
                 # put normalised amplitude into Nebula's dictionary for use
                 self.mic_in = normalised_peak
+            else:
+                self.mic_in = 0
 
     def terminate(self):
         self.stream.stop_stream()
