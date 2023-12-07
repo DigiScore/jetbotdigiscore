@@ -1,6 +1,7 @@
 # Collision Avoidance
 
 There are 2 scripts required here to work with the DigiScore Jetbot ensemble:
+
     | audio.py
     | CA_Digiscore.ipynb
 
@@ -17,14 +18,22 @@ Notice the Ubuntu UI has been disabled, so you should get a terminal window.
 3. password: jetbot
 
 4. check video camera is connected
+~~~
 ls -l /dev/video0
+~~~
 
 5. sudo apt-get update
 password~: jetbot
 
 6. get portaudio libraries
+~~~
 sudo apt-get install portaudio19-dev python-all-dev python3-all-dev
+~~~
 
 7. install pyaudio
+~~~
 python3 pip install pyaudio
+~~~
 
+8. run CA_Digiscore.py from webpage
+Follow instructions here https://jetbot.org/master/examples/basic_motion.html
